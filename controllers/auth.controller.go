@@ -21,6 +21,34 @@ func NewAuthController(DB *gorm.DB) AuthController {
 	return AuthController{DB}
 }
 
+func (ac *AuthController) VerifyOtp(ctx *gin.Context) {
+	var payload *models.UserSanyukt
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	if payload.UserOtp == "" {
+		ctx.JSON(http.StatusBadRequest, CustomResponse("Enter OTP", false, nil))
+		return
+	}
+
+	newUserOtp1 := models.UsersOtp{}
+	ac.DB.Where(&models.UsersOtp{UserMobile: payload.UserMobile}).Find(&newUserOtp1)
+	fmt.Println(newUserOtp1)
+	if newUserOtp1.ID == 0 {
+		ctx.JSON(http.StatusBadRequest, CustomResponse("User is not registered", false, nil))
+		return
+	}
+	if newUserOtp1.UserOtp == payload.UserOtp && newUserOtp1.OtpVerified == "0" {
+		ctx.JSON(http.StatusOK, CustomResponse("OTP Verified", true, nil))
+		return
+	} else {
+		ctx.JSON(http.StatusBadRequest, CustomResponse("OTP Not Verified", false, nil))
+		return
+	}
+
+}
+
 func (ac *AuthController) GenerateOtp(ctx *gin.Context) {
 	var payload *models.UserSanyukt
 
