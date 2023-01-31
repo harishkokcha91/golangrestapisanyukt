@@ -21,6 +21,89 @@ func NewAuthController(DB *gorm.DB) AuthController {
 	return AuthController{DB}
 }
 
+func (ac *AuthController) GenerateOtp(ctx *gin.Context) {
+	var payload *models.UserSanyukt
+
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	if payload.UserMobile == "" {
+		ctx.JSON(http.StatusBadRequest, CustomResponse("user mobile cannot be empty", false, nil))
+		return
+	}
+
+	now := time.Now()
+	newUser := models.SUser{
+		Mobile:    payload.UserMobile,
+		Role:      "user",
+		Verified:  true,
+		Photo:     "",
+		Provider:  "local",
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	result := ac.DB.Create(&newUser)
+
+	if result.Error != nil && strings.Contains(result.Error.Error(), "Duplicate") {
+		ac.createOtpAndUpdateTable(payload, ctx)
+		//ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "User with that email already exists"})
+		return
+	} else if result.Error != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Something bad happened"})
+		return
+	}
+	ac.createOtpAndUpdateTable(payload, ctx)
+	// userResponse := &models.SUserResponse{
+	// 	ID:        newUser.ID,
+	// 	Name:      newUser.Name,
+	// 	Mobile:    newUser.Mobile,
+	// 	Photo:     newUser.Photo,
+	// 	Role:      newUser.Role,
+	// 	Provider:  newUser.Provider,
+	// 	CreatedAt: newUser.CreatedAt,
+	// 	UpdatedAt: newUser.UpdatedAt,
+	// }
+	// ctx.JSON(http.StatusCreated, CustomResponse("User created succesfully", true, userResponse))
+
+}
+
+func (ac *AuthController) createOtpAndUpdateTable(payload *models.UserSanyukt, ctx *gin.Context) {
+	print("genrate otp for mobile " + payload.UserMobile)
+	now := time.Now()
+	newUserOtp := models.UsersOtp{
+		UserMobile:  payload.UserMobile,
+		UserOtp:     "877938",
+		OtpVerified: "0",
+		CreatedAt:   now,
+		UpdatedAt:   now,
+	}
+	newUserOtp1 := models.UsersOtp{}
+
+	if ac.DB.Model(&newUserOtp1).Where("user_mobile=?", newUserOtp.UserMobile).Update("user_otp", "123456").RowsAffected == 0 {
+		fmt.Println("User already available")
+		fmt.Println(newUserOtp)
+		result := ac.DB.Create(&newUserOtp)
+
+		if result.Error != nil {
+			ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Something bad happened"})
+			return
+		}
+		userResponse := &models.UsersOtpResponse{
+			UserOtp: newUserOtp.UserOtp,
+		}
+		ctx.JSON(http.StatusCreated, CustomResponse("Otp has been sent to given mobile number", true, userResponse))
+	} else {
+		userResponse := &models.UsersOtpResponse{
+			UserOtp: "123456",
+		}
+		ctx.JSON(http.StatusCreated, CustomResponse("Otp has been sent to given mobile number", true, userResponse))
+
+	}
+
+}
+
 // SignUp User
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	var payload *models.SignUpInput
