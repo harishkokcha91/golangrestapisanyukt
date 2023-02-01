@@ -48,6 +48,7 @@ type UsersOtpResponse struct {
 type UserSanyukt struct {
 	UserMobile string `json:"user_mobile" binding:"required"`
 	UserOtp    string `json:"user_otp"`
+	Id         string `json:"id"`
 }
 
 type SignUpInput struct {

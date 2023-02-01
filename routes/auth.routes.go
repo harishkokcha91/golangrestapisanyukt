@@ -23,4 +23,5 @@ func (rc *AuthRouteController) AuthRoute(rg *gin.RouterGroup) {
 	router.GET("/logout", middleware.DeserializeUser(), rc.authController.LogoutUser)
 	router.POST("/generateotp", rc.authController.GenerateOtp)
 	router.POST("/verifyotp", rc.authController.VerifyOtp)
+	router.POST("/updateUser", rc.authController.UpdateUser)
 }

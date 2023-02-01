@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -21,8 +22,51 @@ func NewAuthController(DB *gorm.DB) AuthController {
 	return AuthController{DB}
 }
 
+func (ac *AuthController) UpdateUser(ctx *gin.Context) {
+	var access_token string
+	cookie, err := ctx.Cookie("access_token")
+
+	authorizationHeader := ctx.Request.Header.Get("Authorization")
+	fields := strings.Fields(authorizationHeader)
+
+	if len(fields) != 0 && fields[0] == "Bearer" {
+		access_token = fields[1]
+	} else if err == nil {
+		access_token = cookie
+	}
+
+	if access_token == "" {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": "You are not logged in"})
+		return
+	}
+	config, _ := initializers.LoadConfig(".")
+	sub, err := utils.ValidateToken(access_token, config.AccessTokenPublicKey)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+	fmt.Println(sub)
+
+	var payload *models.SUser
+
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	print(payload)
+	id, err := strconv.Atoi(fmt.Sprint(sub))
+	if err != nil {
+		fmt.Println(err.Error())
+		ctx.JSON(http.StatusOK, gin.H{"status": "fail", "message": err.Error()})
+	} else {
+		ac.DB.Model(&models.SUser{}).Where(&models.SUser{ID: id}).Update("name", payload.Name)
+		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "User Updated succussfully"})
+	}
+}
+
 func (ac *AuthController) VerifyOtp(ctx *gin.Context) {
 	var payload *models.UserSanyukt
+
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
 		return
@@ -40,7 +84,26 @@ func (ac *AuthController) VerifyOtp(ctx *gin.Context) {
 		return
 	}
 	if newUserOtp1.UserOtp == payload.UserOtp && newUserOtp1.OtpVerified == "0" {
-		ctx.JSON(http.StatusOK, CustomResponse("OTP Verified", true, nil))
+		config, _ := initializers.LoadConfig(".")
+		access_token, err := utils.CreateToken(config.AccessTokenExpiresIn, newUserOtp1.UserId, config.AccessTokenPrivateKey)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+
+		refresh_token, err := utils.CreateToken(config.RefreshTokenExpiresIn, newUserOtp1.UserId, config.RefreshTokenPrivateKey)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+		print("Update table")
+		ac.DB.Model(&models.UsersOtp{}).Where(&models.UsersOtp{UserMobile: payload.UserMobile}).Update("otp_verified", "1")
+
+		ctx.SetCookie("access_token", access_token, config.AccessTokenMaxAge*60, "/", "localhost", false, true)
+		ctx.SetCookie("refresh_token", refresh_token, config.RefreshTokenMaxAge*60, "/", "localhost", false, true)
+		ctx.SetCookie("logged_in", "true", config.AccessTokenMaxAge*60, "/", "localhost", false, false)
+
+		ctx.JSON(http.StatusOK, gin.H{"status": "success", "refresh_token": refresh_token, "access_token": access_token})
 		return
 	} else {
 		ctx.JSON(http.StatusBadRequest, CustomResponse("OTP Not Verified", false, nil))
@@ -73,6 +136,7 @@ func (ac *AuthController) GenerateOtp(ctx *gin.Context) {
 	}
 
 	result := ac.DB.Create(&newUser)
+	payload.Id = strconv.Itoa(newUser.ID)
 
 	if result.Error != nil && strings.Contains(result.Error.Error(), "Duplicate") {
 		ac.createOtpAndUpdateTable(payload, ctx)
@@ -99,17 +163,19 @@ func (ac *AuthController) GenerateOtp(ctx *gin.Context) {
 
 func (ac *AuthController) createOtpAndUpdateTable(payload *models.UserSanyukt, ctx *gin.Context) {
 	print("genrate otp for mobile " + payload.UserMobile)
+	fmt.Println(payload)
 	now := time.Now()
 	newUserOtp := models.UsersOtp{
 		UserMobile:  payload.UserMobile,
 		UserOtp:     "877938",
 		OtpVerified: "0",
+		UserId:      payload.Id,
 		CreatedAt:   now,
 		UpdatedAt:   now,
 	}
 	newUserOtp1 := models.UsersOtp{}
 
-	if ac.DB.Model(&newUserOtp1).Where("user_mobile=?", newUserOtp.UserMobile).Update("user_otp", "123456").RowsAffected == 0 {
+	if ac.DB.Model(&newUserOtp1).Where("user_mobile=?", newUserOtp.UserMobile).Updates(&models.UsersOtp{UserOtp: "123456", OtpVerified: "0"}).RowsAffected == 0 {
 		fmt.Println("User already available")
 		fmt.Println(newUserOtp)
 		result := ac.DB.Create(&newUserOtp)
