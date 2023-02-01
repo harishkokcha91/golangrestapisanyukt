@@ -36,7 +36,7 @@ type UsersOtp struct {
 	UserMobile  string    `gorm:"uniqueIndextype:varchar(12);not null"`
 	UserOtp     string    `gorm:"type:varchar(10);not null"`
 	OtpVerified string    `gorm:"type:varchar(10);not null"`
-	UserId      string    `gorm:"type:varchar(10);not null"`
+	UserId      string    `gorm:"type:varchar(255);not null"`
 	CreatedAt   time.Time `gorm:"not null"`
 	UpdatedAt   time.Time `gorm:"not null"`
 }

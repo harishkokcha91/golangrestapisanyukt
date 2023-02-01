@@ -2,10 +2,14 @@ package utils
 
 import (
 	"encoding/base64"
+	"errors"
 	"fmt"
+	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/wpcodevo/golang-gorm-postgres/initializers"
 )
 
 func CreateToken(ttl time.Duration, payload interface{}, privateKey string) (string, error) {
@@ -66,4 +70,32 @@ func ValidateToken(token string, publicKey string) (interface{}, error) {
 	}
 
 	return claims["sub"], nil
+}
+
+func ValidateTokenAndGetUserId(ctx *gin.Context) (interface{}, error) {
+	var access_token string
+	cookie, err := ctx.Cookie("access_token")
+
+	authorizationHeader := ctx.Request.Header.Get("Authorization")
+	fields := strings.Fields(authorizationHeader)
+
+	if len(fields) != 0 && fields[0] == "Bearer" {
+		access_token = fields[1]
+	} else if err == nil {
+		access_token = cookie
+	}
+
+	if access_token == "" {
+		// ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": "You are not logged in"})
+		err1 := errors.New("you are logged out")
+		return "", err1
+	}
+
+	config, _ := initializers.LoadConfig(".")
+	sub, err := ValidateToken(access_token, config.AccessTokenPublicKey)
+	if err != nil {
+		// ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": err.Error()})
+		return "", err
+	}
+	return sub, nil
 }
