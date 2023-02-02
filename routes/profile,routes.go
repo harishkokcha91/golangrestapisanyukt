@@ -14,6 +14,7 @@ func NewProfileRouteController(profileController controllers.ProfileController) 
 }
 
 func (rc *ProfileRouteController) AuthRoute(rg *gin.RouterGroup) {
-	//	router := rg.Group("auth")
-
+	router := rg.Group("profile")
+	router.POST("/create", rc.profileController.CreateProfile)
+	//router.POST("/getProfiles", rc.profileController.CreateProfile)
 }
