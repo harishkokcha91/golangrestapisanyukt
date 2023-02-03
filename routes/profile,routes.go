@@ -13,8 +13,12 @@ func NewProfileRouteController(profileController controllers.ProfileController) 
 	return ProfileRouteController{profileController}
 }
 
-func (rc *ProfileRouteController) AuthRoute(rg *gin.RouterGroup) {
+func (rc *ProfileRouteController) ProfileRoute(rg *gin.RouterGroup) {
 	router := rg.Group("profile")
 	router.POST("/create", rc.profileController.CreateProfile)
-	//router.POST("/getProfiles", rc.profileController.CreateProfile)
+	router.POST("/getProfiles", rc.profileController.GetProfiles)
+	router.POST("/getProfile", rc.profileController.GetProfile)
+	router.POST("/getMyProfiles", rc.profileController.GetMyProfiles)
+	router.POST("/createFavProfiles", rc.profileController.CreateFavProfiles)
+	router.POST("/getFavProfiles", rc.profileController.GetFavProfiles)
 }

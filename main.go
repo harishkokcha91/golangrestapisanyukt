@@ -68,7 +68,7 @@ func main() {
 	})
 
 	AuthRouteController.AuthRoute(router)
-	ProfileRouteController.AuthRoute(router)
+	ProfileRouteController.ProfileRoute(router)
 
 	UserRouteController.UserRoute(router)
 	PostRouteController.PostRoute(router)

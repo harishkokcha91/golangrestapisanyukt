@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,76 @@ type ProfileController struct {
 
 func NewProfileController(DB *gorm.DB) ProfileController {
 	return ProfileController{DB}
+}
+
+func (ac *ProfileController) GetProfile(ctx *gin.Context) {
+	var payload *models.FavProfile
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	var profiles models.Profile
+	ac.DB.Model(&models.Profile{}).Where("id=?", payload.ProfileId).Find(&profiles)
+
+	fmt.Println(profiles)
+
+	ctx.JSON(http.StatusBadRequest, CustomResponse("found", true, profiles))
+}
+
+func (ac *ProfileController) GetMyProfiles(ctx *gin.Context) {
+	var payload *models.Profile
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	var profiles []models.Profile
+	ac.DB.Model(&models.Profile{}).Where("user_id=?", payload.UserId).Find(&profiles)
+
+	fmt.Println(profiles)
+
+	ctx.JSON(http.StatusBadRequest, CustomResponse("found", true, profiles))
+}
+
+func (ac *ProfileController) GetProfiles(ctx *gin.Context) {
+	var payload *models.Profile
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	var profiles []models.Profile
+	ac.DB.Model(&models.Profile{}).Where("gender=?", payload.Gender).Find(&profiles)
+
+	fmt.Println(profiles)
+
+	ctx.JSON(http.StatusBadRequest, CustomResponse("found", true, profiles))
+}
+
+func (ac *ProfileController) CreateFavProfiles(ctx *gin.Context) {
+	var payload *models.FavProfile
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	result := ac.DB.Create(&payload)
+
+	if result.Error != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Something bad happened"})
+		return
+	}
+
+	ctx.JSON(http.StatusConflict, gin.H{"status": "true", "message": "Profile created Fav"})
+}
+
+func (ac *ProfileController) GetFavProfiles(ctx *gin.Context) {
+	var payload *models.FavProfile
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, CustomResponse(err.Error(), false, nil))
+		return
+	}
+	var profiles []models.Profile
+	ac.DB.Model(&models.Profile{}).Joins("left join fav_profiles on profiles.id =fav_profiles.profile_id").Where("fav_profiles.user_id=?", payload.UserId).Scan(&profiles)
+
+	ctx.JSON(http.StatusBadRequest, CustomResponse("found", true, profiles))
 }
 
 func (ac *ProfileController) CreateProfile(ctx *gin.Context) {

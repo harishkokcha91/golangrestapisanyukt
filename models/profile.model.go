@@ -4,6 +4,13 @@ import (
 	"time"
 )
 
+type FavProfile struct {
+	ID        int       `gorm:"primary_key;AUTO_INCREMENT;not null" json:"id,omitempty"`
+	UserId    string    `gorm:"not null" json:"user_id,omitempty"`
+	ProfileId string    `gorm:"not null" json:"profile_id,omitempty"`
+	CreatedAt time.Time `gorm:"not null" json:"created_at,omitempty"`
+	UpdatedAt time.Time `gorm:"not null" json:"updated_at,omitempty"`
+}
 type Profile struct {
 	ID          int    `gorm:"primary_key;AUTO_INCREMENT;not null" json:"id,omitempty"`
 	UserId      string `gorm:"not null" json:"user_id,omitempty"`
