@@ -67,7 +67,8 @@ content-type: application/json
 ###
 // Update User
 POST http://{{host}}/api/auth/updateUser HTTP/1.1 
-content-type: application/json
+content-type: application/json 
+
 
 {
     "id":2,
