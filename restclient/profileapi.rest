@@ -1,0 +1,103 @@
+@host = localhost:8000
+
+###
+# // Get healthchecker
+GET http://{{host}}/api/healthchecker HTTP/1.1 
+content-type: application/json
+###
+
+###
+// Create Profile 
+POST http://{{host}}/api/profile/create HTTP/1.1 
+content-type: application/json
+
+{
+    "user_id": "52",
+    "profile_for": "child",
+    "gender": "male",
+    "user_name": "Lakshiv",
+    "date_of_birth": "20-12-2000",
+    "gotra": "kokcha",
+    "mother_gotra": "rohilla",
+    "mother_tongue": "hindi",
+    "native_place": "Narnaul",
+    "height": "5.6",
+    "physique": "Fit",
+    "complexion": "fair",
+    "weight": "65",
+    "blood_group": "A+",
+    "hobbies": "Playing cricket",
+    "family_status": "Middle class",
+    "place_of_birth": "Narnaul",
+    "time_of_birth": "01:25",
+    "have_horoscope": "no",
+    "manglik": "no",
+    "unmarried_brothers": "0",
+    "married_brothers": "1",
+    "married_sisters": "1",
+    "unmarried_sisters": "1",
+    "marital_status": "single",
+    "no_of_children": "0",
+    "academic": "Graduate",
+    "profession": "Private job",
+    "salary": "10lakh",
+    "company": "XYZ",
+    "occupation_address": "Gurgaon",
+    "smoke": "no",
+    "drink": "no",
+    "diet": "veg",
+    "other_amusements": "none",
+    "Address": "Kokcha bhawan moh: peer aga",
+    "city": "Narnaul",
+    "state": "Haryana",
+    "country": "India",
+    "pin_code": "123001",
+    "email_address": "hkokcha@gmail.com",
+    "contact_number": "9996898299",
+    "father_name": "Pramod",
+    "about_self": "Happilly married",
+    "about_preference": "Graduate required",
+    "show_picture_publiclly": "no",
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "0001-01-01T00:00:00Z"
+}
+###
+
+// Get Profiles 
+POST http://{{host}}/api/profile/createFavProfiles HTTP/1.1 
+content-type: application/json
+
+{
+    "user_id": "52",
+    "profile_id":"1"
+}
+
+###
+// Get MyProfiles 
+
+POST http://{{host}}/api/profile/getMyProfiles HTTP/1.1 
+content-type: application/json
+
+{
+    "user_id": "52"
+}
+
+
+###
+// Create Fav Profile 
+POST http://{{host}}/api/profile/createFavProfiles HTTP/1.1 
+content-type: application/json
+
+{
+    "user_id": "52",
+    "profile_id": "1"
+}
+
+###
+// Get Fav Profile 
+POST http://{{host}}/api/profile/getFavProfiles HTTP/1.1 
+content-type: application/json
+
+{
+    "user_id": "52"
+}

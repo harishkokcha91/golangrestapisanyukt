@@ -9,15 +9,15 @@ import (
 )
 
 func init() {
-	config, err := initializers.LoadConfig(".")
+	config, err := initializers.LoadConfig("../.")
 	if err != nil {
-		log.Fatal("🚀 Could not load environment variables", err)
+		log.Fatal("🚀 Could not load environment variables ", err)
 	}
 
 	initializers.ConnectDB(&config)
 }
 
 func main() {
-	initializers.DB.AutoMigrate(&models.SUser{}, &models.UsersOtp{}, &models.Profile{}, &models.FavProfile{})
+	initializers.DB.AutoMigrate(&models.User{}, &models.SUser{}, &models.UsersOtp{}, &models.Profile{}, &models.FavProfile{})
 	fmt.Println("👍 Migration complete")
 }

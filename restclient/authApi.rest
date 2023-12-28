@@ -1,0 +1,76 @@
+@host = localhost:8000
+
+###
+# // Get healthchecker
+GET http://{{host}}/api/healthchecker HTTP/1.1 
+content-type: application/json
+###
+
+###
+// Create Profile 
+POST http://{{host}}/api/auth/register HTTP/1.1 
+content-type: application/json
+
+{
+    "name":"Harish",
+    "email":"hkokcha@gmail.com",
+    "password":"abc12311",
+    "passwordConfirm":"abc12311",
+    "photo":"sadf"
+}
+
+###
+// Login User
+POST http://{{host}}/api/auth/login HTTP/1.1 
+content-type: application/json
+
+{
+    "name":"Harish",
+    "email":"hkokcha@gmail.com",
+    "password":"abc12311",
+    "passwordConfirm":"abc12311",
+    "photo":"sadf"
+}
+
+###
+# //logout 
+GET http://{{host}}/api/auth/logout HTTP/1.1 
+content-type: application/json
+
+###
+# // Get healthchecker
+GET http://{{host}}/api/auth/refresh HTTP/1.1 
+content-type: application/json
+
+
+###
+// Generate OTP
+POST http://{{host}}/api/auth/generateotp HTTP/1.1 
+content-type: application/json
+
+{
+    "user_mobile": "9998889998"
+}
+
+
+###
+// Verify OTP
+POST http://{{host}}/api/auth/verifyotp HTTP/1.1 
+content-type: application/json
+
+{
+    "user_mobile": "9998889998",
+    "user_otp": "877938"
+}
+
+
+###
+// Update User
+POST http://{{host}}/api/auth/updateUser HTTP/1.1 
+content-type: application/json
+
+{
+    "id":2,
+    "mobile":"7998889912",
+    "name":"Kapil kok"
+}
