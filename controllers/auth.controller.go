@@ -22,6 +22,17 @@ func NewAuthController(DB *gorm.DB) AuthController {
 	return AuthController{DB}
 }
 
+// UpdateUser godoc
+// @Summary Update User
+// @Description Update the user information
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param payload body models.SUser true "User Update Payload"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /api/updateUser [post]
 func (ac *AuthController) UpdateUser(ctx *gin.Context) {
 	sub, err1 := utils.ValidateTokenAndGetUserId(ctx)
 	if err1 != nil {
@@ -47,6 +58,15 @@ func (ac *AuthController) UpdateUser(ctx *gin.Context) {
 	}
 }
 
+// @Summary Verify OTP
+// @Description Verify the OTP for a user
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param input body models.UserSanyukt true "User Sanyukt input"
+// @Success 200 {object} models.Response "Success response"
+// @Failure 400 {object} models.Response "Failure response"
+// @Router /verifyotp [post]
 func (ac *AuthController) VerifyOtp(ctx *gin.Context) {
 	var payload *models.UserSanyukt
 
@@ -95,6 +115,17 @@ func (ac *AuthController) VerifyOtp(ctx *gin.Context) {
 
 }
 
+// GenerateOtp godoc
+// @Summary Generate OTP
+// @Description Generate OTP for the user
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param payload body models.UserSanyukt true "User Mobile"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 502 {object} map[string]interface{}
+// @Router /api/generateotp [post]
 func (ac *AuthController) GenerateOtp(ctx *gin.Context) {
 	var payload *models.UserSanyukt
 

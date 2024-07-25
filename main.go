@@ -4,8 +4,12 @@ import (
 	"log"
 	"net/http"
 
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "github.com/wpcodevo/golang-gorm-postgres/docs" // This is required to serve the Swagger docs
+
 	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin" // swagger embed files
 	"github.com/wpcodevo/golang-gorm-postgres/controllers"
 	"github.com/wpcodevo/golang-gorm-postgres/initializers"
 	"github.com/wpcodevo/golang-gorm-postgres/routes"
@@ -49,6 +53,10 @@ func init() {
 	server = gin.Default()
 }
 
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server.
+// @termsOfService http://swagger.io/terms/
 func main() {
 	config, err := initializers.LoadConfig(".")
 	if err != nil {
@@ -61,11 +69,26 @@ func main() {
 
 	server.Use(cors.New(corsConfig))
 
+	// Swagger endpoint
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// API group
 	router := server.Group("/api")
+
+	// @Summary Health Check
+	// @Description Returns a welcome message
+	// @Tags health
+	// @Accept  json
+	// @Produce  json
+	// @Success 200 {object} map[string]interface{}
+	// @Router /api/healthchecker [get]
 	router.GET("/healthchecker", func(ctx *gin.Context) {
 		message := "Welcome to Golang with Gorm and Postgres"
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": message})
 	})
+
+	// Swagger endpoint
+	// router.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
 	AuthRouteController.AuthRoute(router)
 	ProfileRouteController.ProfileRoute(router)
@@ -74,4 +97,5 @@ func main() {
 	PostRouteController.PostRoute(router)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
+
 }

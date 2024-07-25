@@ -12,6 +12,14 @@ import (
 	"github.com/wpcodevo/golang-gorm-postgres/utils"
 )
 
+// LogoutUser godoc
+// @Summary Logout user
+// @Description Clear the cookies to log the user out
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} map[string]interface{}
+// @Router /api/logout [get]
 func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.SetCookie("access_token", "", -1, "/", "localhost", false, true)
 	ctx.SetCookie("refresh_token", "", -1, "/", "localhost", false, true)
@@ -20,6 +28,15 @@ func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
+// RefreshAccessToken godoc
+// @Summary Refresh access token
+// @Description Refresh the access token using the refresh token
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} map[string]interface{}
+// @Failure 403 {object} map[string]string
+// @Router /api/refresh [get]
 // Refresh Access Token
 func (ac *AuthController) RefreshAccessToken(ctx *gin.Context) {
 	message := "could not refresh access token"
@@ -58,6 +75,16 @@ func (ac *AuthController) RefreshAccessToken(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "access_token": access_token})
 }
 
+// SignInUser godoc
+// @Summary Sign in a user
+// @Description Authenticate a user with email and password
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param payload body models.SignInInput true "Sign In Input"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Router /api/login [post]
 func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	var payload *models.SignInInput
 
@@ -100,6 +127,18 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "access_token": access_token})
 }
 
+// SignUpUser godoc
+// @Summary Sign up a new user
+// @Description Register a new user with the provided information
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param payload body models.SignUpInput true "Sign Up Input"
+// @Success 201 {object} models.UserResponse
+// @Failure 400 {object} map[string]string
+// @Failure 409 {object} map[string]string
+// @Failure 502 {object} map[string]string
+// @Router /api/register [post]
 // SignUp User
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	var payload *models.SignUpInput
