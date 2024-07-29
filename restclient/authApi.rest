@@ -19,6 +19,18 @@ content-type: application/json
     "photo":"sadf"
 }
 
+
+###
+// Create Profile 
+POST http://{{host}}/api/auth/registeration HTTP/1.1 
+content-type: application/json
+
+{
+    "name":"Harish",
+    "mobile":"9996838491"
+}
+
+
 ###
 // Login User
 POST http://{{host}}/api/auth/login HTTP/1.1 
@@ -49,9 +61,8 @@ POST http://{{host}}/api/auth/generateotp HTTP/1.1
 content-type: application/json
 
 {
-    "user_mobile": "9998889998"
+    "user_mobile": "8898889992"
 }
-
 
 ###
 // Verify OTP
@@ -59,8 +70,9 @@ POST http://{{host}}/api/auth/verifyotp HTTP/1.1
 content-type: application/json
 
 {
-    "user_mobile": "9998889998",
-    "user_otp": "877938"
+    "user_mobile": "8898889992",
+    "user_otp": "123456"
+    
 }
 
 
@@ -68,10 +80,11 @@ content-type: application/json
 // Update User
 POST http://{{host}}/api/auth/updateUser HTTP/1.1 
 content-type: application/json 
-
+Authorization: "Bearer
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDQyNjU3MTEsImlhdCI6MTcwNDI2NDgxMSwibmJmIjoxNzA0MjY0ODExLCJzdWIiOiIxIn0.D_R0Rrd2iwcuGvov7rqlFNbJ4fgL6HYAbHs5p3LN1JKwd6viOlXNrFjToMR0tHMlYtWi7XFKQPbJUgq1M58__A"
 
 {
     "id":2,
-    "mobile":"7998889912",
-    "name":"Kapil kok"
+    "mobile":"8898889992",
+    "name":"Kapil kokvg"
 }

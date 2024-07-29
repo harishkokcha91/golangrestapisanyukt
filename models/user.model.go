@@ -2,14 +2,12 @@ package models
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type User struct {
-	ID        uuid.UUID `gorm:"primary_key"`
+	ID        int       `gorm:"primary_key;AUTO_INCREMENT;not null"`
 	Name      string    `gorm:"type:varchar(255);not null"`
-	Email     string    `gorm:"uniqueIndex;not null"`
+	Email     string    `gorm:"type:varchar(255);"`
 	Password  string    `gorm:"not null"`
 	Mobile    string    `gorm:"uniqueIndex;type:varchar(255);not null"`
 	Role      string    `gorm:"type:varchar(255);not null"`
@@ -60,13 +58,18 @@ type SignUpInput struct {
 	Photo           string `json:"photo" binding:"required"`
 }
 
+type RegisterInput struct {
+	Name   string `json:"name" binding:"required"`
+	Email  string `json:"email"`
+	Mobile string `json:"mobile" binding:"required,min=10"`
+}
 type SignInInput struct {
 	Email    string `json:"email"  binding:"required"`
 	Password string `json:"password"  binding:"required"`
 }
 
 type UserResponse struct {
-	ID        uuid.UUID `json:"id,omitempty"`
+	ID        int       `json:"id,omitempty"`
 	Name      string    `json:"name,omitempty"`
 	Mobile    string    `json:"mobile,omitempty"`
 	Email     string    `json:"email,omitempty"`

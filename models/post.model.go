@@ -11,7 +11,7 @@ type Post struct {
 	Title     string    `gorm:"uniqueIndex;not null" json:"title,omitempty"`
 	Content   string    `gorm:"not null" json:"content,omitempty"`
 	Image     string    `gorm:"not null" json:"image,omitempty"`
-	User      uuid.UUID `gorm:"not null" json:"user,omitempty"`
+	User      int       `gorm:"not null" json:"user,omitempty"`
 	CreatedAt time.Time `gorm:"not null" json:"created_at,omitempty"`
 	UpdatedAt time.Time `gorm:"not null" json:"updated_at,omitempty"`
 }
