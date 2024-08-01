@@ -8,6 +8,20 @@ import (
 	"github.com/wpcodevo/golang-gorm-postgres/models"
 )
 
+var AllModels = []interface{}{
+	&models.User{},
+	&models.SUser{},
+	&models.UsersOtp{},
+	&models.Profile{},
+	&models.FavProfile{},
+	&models.Business{},
+	&models.BusinessHour{},
+	&models.Category{},
+	&models.BusinessReview{},
+	&models.Post{},
+	&models.Event{},
+}
+
 func init() {
 	config, err := initializers.LoadConfig("../.")
 	if err != nil {
@@ -18,6 +32,6 @@ func init() {
 }
 
 func main() {
-	initializers.DB.AutoMigrate(&models.User{}, &models.SUser{}, &models.UsersOtp{}, &models.Profile{}, &models.FavProfile{}, &models.Business{}, &models.BusinessHour{}, &models.Category{}, &models.BusinessReview{}, &models.Post{}, &models.Event{})
+	initializers.DB.AutoMigrate(AllModels...)
 	fmt.Println("👍 Migration complete")
 }
