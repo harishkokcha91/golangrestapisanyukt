@@ -33,6 +33,9 @@ var (
 
 	BrilliantAchieverController      controllers.BrilliantAchieverController
 	BrilliantAchieverRouteController routes.BrilliantAchieverRouteController
+
+	FacilityController      controllers.FacilityController
+	FacilityRouteController routes.FacilityRouteController
 )
 
 func init() {
@@ -64,6 +67,9 @@ func init() {
 	BrilliantAchieverController = controllers.NewBrilliantAchieverController(initializers.DB)
 	BrilliantAchieverRouteController = routes.NewBrilliantAchieverRouteController(BrilliantAchieverController)
 
+	FacilityController = controllers.NewFacilityController(initializers.DB)
+	FacilityRouteController = routes.NewFacilityRouteController(FacilityController)
+
 	server = gin.Default()
 }
 
@@ -93,6 +99,7 @@ func main() {
 	BusinessRouteController.BusinessRoute(router)
 	EventRouteController.EventRoute(router)
 	BrilliantAchieverRouteController.BrilliantAchieverRoutes(router)
+	FacilityRouteController.FacilityRoute(router)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
 

@@ -21,6 +21,7 @@ var AllModels = []interface{}{
 	&models.Post{},
 	&models.Event{},
 	&models.BrilliantAchiever{},
+	&models.Facility{},
 }
 
 func init() {
