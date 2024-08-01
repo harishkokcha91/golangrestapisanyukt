@@ -1,4 +1,6 @@
 @host = localhost:8000
+@api = http://{{host}}/api
+@token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI0OTcxMzUsImlhdCI6MTcyMjQ5NjIzNSwibmJmIjoxNzIyNDk2MjM1LCJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAifQ.nVGcCGPuESgtw7_moJ4cF0P_mc6Arc2Go30RMPKqMVGASXZmNtqVatcEVtiVFTIwsfTGPh7awWM0sQlCWtNHyA
 
 ###
 # // Get healthchecker
@@ -8,7 +10,7 @@ content-type: application/json
 
 ###
 // Create Profile 
-POST http://{{host}}/api/profile/create HTTP/1.1 
+POST http://{{host}}/api/profiles/create HTTP/1.1 
 content-type: application/json
 
 {
@@ -64,7 +66,7 @@ content-type: application/json
 ###
 
 // Get Profiles 
-POST http://{{host}}/api/profile/createFavProfiles HTTP/1.1 
+POST http://{{host}}/api/profiles/createFavProfiles HTTP/1.1 
 content-type: application/json
 
 {
@@ -75,7 +77,7 @@ content-type: application/json
 ###
 // Get MyProfiles 
 
-POST http://{{host}}/api/profile/getMyProfiles HTTP/1.1 
+POST http://{{host}}/api/profiles/getMyProfiles HTTP/1.1 
 content-type: application/json
 
 {
@@ -85,7 +87,7 @@ content-type: application/json
 
 ###
 // Create Fav Profile 
-POST http://{{host}}/api/profile/createFavProfiles HTTP/1.1 
+POST http://{{host}}/api/profiles/createFavProfiles HTTP/1.1 
 content-type: application/json
 
 {
@@ -95,9 +97,153 @@ content-type: application/json
 
 ###
 // Get Fav Profile 
-POST http://{{host}}/api/profile/getFavProfiles HTTP/1.1 
+POST http://{{host}}/api/profiles/getFavProfiles HTTP/1.1 
 content-type: application/json
 
 {
     "user_id": "52"
 }
+
+
+###
+# Health Check
+GET {{api}}/healthchecker HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Create a New Profile
+POST {{api}}/profiles HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "user_id": "user123",
+  "profile_for": "self",
+  "gender": "female",
+  "user_name": "Jane Doe",
+  "date_of_birth": "1990-01-01",
+  "gotra": "SomeGotra",
+  "mother_gotra": "SomeMotherGotra",
+  "mother_tongue": "Hindi",
+  "native_place": "Delhi",
+  "height": "5.6",
+  "physique": "Slim",
+  "complexion": "Fair",
+  "weight": "55",
+  "blood_group": "O+",
+  "hobbies": "Reading, Traveling",
+  "family_status": "Middle Standard",
+  "place_of_birth": "Delhi",
+  "time_of_birth": "10:00",
+  "have_horoscope": "Yes",
+  "manglik": "No",
+  "unmarried_brothers": "1",
+  "married_brothers": "0",
+  "married_sisters": "1",
+  "unmarried_sisters": "1",
+  "marital_status": "Single",
+  "no_of_children": "0",
+  "academic": "Masters",
+  "profession": "Engineer",
+  "salary": "70000",
+  "company": "TechCorp",
+  "occupation_address": "123 Tech St",
+  "smoke": "No",
+  "drink": "Occasionally",
+  "diet": "Vegetarian",
+  "other_amusements": "Movies",
+  "address": "456 Main St",
+  "city": "Delhi",
+  "state": "Delhi",
+  "country": "India",
+  "pin_code": "110001",
+  "email_address": "jane.doe@example.com",
+  "contact_number": "+911234567890",
+  "father_name": "John Doe",
+  "about_self": "I am a passionate engineer...",
+  "about_family": "We are a small, close-knit family...",
+  "about_preference": "Looking for someone with similar values...",
+  "photos": "http://example.com/photo.jpg",
+  "show_picture_publicly": "Yes"
+}
+
+###
+
+# Get List of Profiles
+GET {{api}}/profiles?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+@id=1
+# Find a Profile by ID
+GET {{api}}/profiles/{{id}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Update a Profile by ID
+PUT {{api}}/profiles/{{id}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "user_id": "user123",
+  "profile_for": "self",
+  "gender": "female",
+  "user_name": "Jane Doe",
+  "date_of_birth": "1990-01-01",
+  "gotra": "SomeGotra",
+  "mother_gotra": "SomeMotherGotra",
+  "mother_tongue": "Hindi",
+  "native_place": "Delhi",
+  "height": "5.6",
+  "physique": "Slim",
+  "complexion": "Fair",
+  "weight": "55",
+  "blood_group": "O+",
+  "hobbies": "Reading, Traveling",
+  "family_status": "Middle Standard",
+  "place_of_birth": "Delhi",
+  "time_of_birth": "10:00",
+  "have_horoscope": "Yes",
+  "manglik": "No",
+  "unmarried_brothers": "1",
+  "married_brothers": "0",
+  "married_sisters": "1",
+  "unmarried_sisters": "1",
+  "marital_status": "Single",
+  "no_of_children": "0",
+  "academic": "Masters",
+  "profession": "Engineer",
+  "salary": "70000",
+  "company": "TechCorp",
+  "occupation_address": "123 Tech St",
+  "smoke": "No",
+  "drink": "Occasionally",
+  "diet": "Vegetarian",
+  "other_amusements": "Movies",
+  "address": "456 Main St",
+  "city": "Delhi",
+  "state": "Delhi",
+  "country": "India",
+  "pin_code": "110001",
+  "email_address": "jane.doe@example.com",
+  "contact_number": "+911234567890",
+  "father_name": "John Doe",
+  "about_self": "I am a passionate engineer...",
+  "about_family": "We are a small, close-knit family...",
+  "about_preference": "Looking for someone with similar values...",
+  "photos": "http://example.com/photo.jpg",
+  "show_picture_publicly": "Yes"
+}
+
+###
+
+# Delete a Profile by ID
+DELETE {{api}}/profiles/{{id}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
