@@ -27,6 +27,9 @@ var (
 
 	BusinessController      controllers.BusinessController
 	BusinessRouteController routes.BusinessRouteController
+
+	EventController      controllers.EventController
+	EventRouteController routes.EventRouteController
 )
 
 func init() {
@@ -51,6 +54,9 @@ func init() {
 
 	BusinessController = controllers.NewBusinessController(initializers.DB)
 	BusinessRouteController = routes.NewBusinessRouteController(BusinessController)
+
+	EventController = controllers.NewEventController(initializers.DB)
+	EventRouteController = routes.NewEventRouteController(EventController)
 
 	server = gin.Default()
 }
@@ -79,6 +85,7 @@ func main() {
 	UserRouteController.UserRoute(router)
 	PostRouteController.PostRoute(router)
 	BusinessRouteController.BusinessRoute(router)
+	EventRouteController.EventRoute(router)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
 }

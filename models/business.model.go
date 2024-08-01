@@ -7,7 +7,7 @@ import (
 )
 
 type Business struct {
-	ID           uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key" json:"id,omitempty"`
+	ID           uuid.UUID `gorm:"type:uuid;primary_key" json:"id,omitempty"`
 	Name         string    `gorm:"not null" json:"name,omitempty"`
 	Description  string    `gorm:"type:text" json:"description,omitempty"`
 	CategoryID   uuid.UUID `gorm:"type:uuid" json:"category_id,omitempty"`
@@ -26,7 +26,7 @@ type Business struct {
 }
 
 type Image struct {
-	ID          uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key" json:"id,omitempty"`
+	ID          uuid.UUID `gorm:"type:uuid;primary_key" json:"id,omitempty"`
 	BusinessID  uuid.UUID `gorm:"type:uuid" json:"business_id,omitempty"`
 	URL         string    `gorm:"not null" json:"url,omitempty"`
 	Description string    `gorm:"type:text" json:"description,omitempty"`
@@ -34,7 +34,7 @@ type Image struct {
 }
 
 type BusinessReview struct {
-	ID           uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key" json:"id,omitempty"`
+	ID           uuid.UUID `gorm:"type:uuid;primary_key" json:"id,omitempty"`
 	BusinessID   uuid.UUID `gorm:"type:uuid" json:"business_id,omitempty"`
 	ReviewerName string    `gorm:"not null" json:"reviewer_name,omitempty"`
 	Rating       int       `gorm:"not null;check:rating >= 1 AND rating <= 5" json:"rating,omitempty"`
@@ -43,7 +43,7 @@ type BusinessReview struct {
 }
 
 type BusinessHour struct {
-	ID         uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key" json:"id,omitempty"`
+	ID         uuid.UUID `gorm:"type:uuid;primary_key" json:"id,omitempty"`
 	BusinessID uuid.UUID `gorm:"type:uuid" json:"business_id,omitempty"`
 	DayOfWeek  string    `gorm:"not null" json:"day_of_week,omitempty"`
 	OpenTime   time.Time `gorm:"not null" json:"open_time,omitempty"`
@@ -53,7 +53,7 @@ type BusinessHour struct {
 }
 
 type Category struct {
-	ID          uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key" json:"id,omitempty"`
+	ID          uuid.UUID `gorm:"type:uuid;primary_key" json:"id,omitempty"`
 	Name        string    `gorm:"unique;not null" json:"name,omitempty"`
 	Description string    `gorm:"type:text" json:"description,omitempty"`
 	CreatedAt   time.Time `gorm:"not null" json:"created_at,omitempty"`

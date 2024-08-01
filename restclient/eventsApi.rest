@@ -1,0 +1,60 @@
+@host = localhost:8000
+@api = http://{{host}}/api
+
+@token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI0OTcxMzUsImlhdCI6MTcyMjQ5NjIzNSwibmJmIjoxNzIyNDk2MjM1LCJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAifQ.nVGcCGPuESgtw7_moJ4cF0P_mc6Arc2Go30RMPKqMVGASXZmNtqVatcEVtiVFTIwsfTGPh7awWM0sQlCWtNHyA
+
+###
+# Health Check
+GET {{api}}/healthchecker HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Create a New Event
+POST {{api}}/events HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Sample Event Title",
+  "description": "This is a sample event description.",
+  "date_time": "2024-08-01T15:00:00Z",
+  "location": "Sample Location",
+  "image": "https://example.com/sample-image.jpg"
+}
+
+###
+
+# Get List of Events
+GET {{api}}/events?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+@eventId = 1
+# Find an Event by ID
+GET {{api}}/events/{{eventId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Update an Event by ID
+PUT {{api}}/events/{{eventId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Updated Event Title",
+  "description": "Updated event description.",
+  "date_time": "2024-08-02T16:00:00Z",
+  "location": "Updated Location",
+  "image": "https://example.com/updated-image.jpg"
+}
+
+###
+
+# Delete an Event by ID
+DELETE {{api}}/events/{{eventId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

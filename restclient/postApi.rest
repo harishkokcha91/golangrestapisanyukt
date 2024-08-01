@@ -1,0 +1,56 @@
+@host = localhost:8000
+@api = http://{{host}}/api
+
+@token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI0OTcxMzUsImlhdCI6MTcyMjQ5NjIzNSwibmJmIjoxNzIyNDk2MjM1LCJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAifQ.nVGcCGPuESgtw7_moJ4cF0P_mc6Arc2Go30RMPKqMVGASXZmNtqVatcEVtiVFTIwsfTGPh7awWM0sQlCWtNHyA
+
+###
+# Health Check
+GET {{api}}/healthchecker HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Create a New Post
+POST {{api}}/posts HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Sample Post1 Title1",
+  "content": "This is a sample post content.",
+  "image": "https://example.com/sample-image.jpg"
+}
+
+###
+
+# Get List of Posts
+GET {{api}}/posts?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Find a Post by ID
+GET {{api}}/posts/{{postId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Update a Post by ID
+PUT {{api}}/posts/{{postId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Updated Post Title",
+  "content": "Updated content of the post.",
+  "image": "https://example.com/updated-image.jpg"
+}
+
+###
+
+# Delete a Post by ID
+DELETE {{api}}/posts/{{postId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
