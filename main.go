@@ -36,6 +36,9 @@ var (
 
 	FacilityController      controllers.FacilityController
 	FacilityRouteController routes.FacilityRouteController
+
+	ContactController      controllers.ContactController
+	ContactRouteController routes.ContactRouteController
 )
 
 func init() {
@@ -70,6 +73,9 @@ func init() {
 	FacilityController = controllers.NewFacilityController(initializers.DB)
 	FacilityRouteController = routes.NewFacilityRouteController(FacilityController)
 
+	ContactController = controllers.NewContactController(initializers.DB)
+	ContactRouteController = routes.NewContactRouteController(ContactController)
+
 	server = gin.Default()
 }
 
@@ -100,6 +106,7 @@ func main() {
 	EventRouteController.EventRoute(router)
 	BrilliantAchieverRouteController.BrilliantAchieverRoutes(router)
 	FacilityRouteController.FacilityRoute(router)
+	ContactRouteController.ContactRoute(router)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
 

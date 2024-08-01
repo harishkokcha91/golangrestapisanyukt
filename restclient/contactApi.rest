@@ -1,0 +1,72 @@
+@host = localhost:8000
+@api = http://{{host}}/api
+@token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI1MDQ2NTksImlhdCI6MTcyMjUwMzc1OSwibmJmIjoxNzIyNTAzNzU5LCJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAifQ.nfJg3QfSMXZ5MS-XC7avCSD7kUJ9Wes0tomCerpZvp6biokDtOlbpvvCUrLWWng3idCwE73QwayOY7tDQKsW7Q
+
+###
+# Health Check
+GET {{api}}/healthchecker HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Create a New Contact
+POST {{api}}/contacts HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "John Doe",
+  "phone_number": "+1234567890",
+  "email": "johndoe@example.com",
+  "address": "123 Main Street, Suite 101",
+  "city": "Sample City",
+  "state": "Sample State",
+  "postal_code": "12345",
+  "country": "Sample Country",
+  "organization": "Sample Organization",
+  "role": "Sample Role",
+  "notes": "Sample notes about this contact."
+}
+
+###
+
+# Get List of Contacts
+GET {{api}}/contacts?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+@contactId=1
+# Find a Contact by ID
+GET {{api}}/contacts/{{contactId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Update a Contact by ID
+PUT {{api}}/contacts/{{contactId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Jane Doe",
+  "phone_number": "+0987654321",
+  "email": "janedoe@example.com",
+  "address": "456 Elm Street, Apt 202",
+  "city": "Another City",
+  "state": "Another State",
+  "postal_code": "54321",
+  "country": "Another Country",
+  "organization": "Another Organization",
+  "role": "Another Role",
+  "notes": "Updated notes about this contact."
+}
+
+###
+
+# Delete a Contact by ID
+DELETE {{api}}/contacts/{{contactId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
