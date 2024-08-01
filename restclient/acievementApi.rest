@@ -1,0 +1,63 @@
+@host = localhost:8000
+@api = http://{{host}}/api
+
+@token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI0OTcxMzUsImlhdCI6MTcyMjQ5NjIzNSwibmJmIjoxNzIyNDk2MjM1LCJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAifQ.nVGcCGPuESgtw7_moJ4cF0P_mc6Arc2Go30RMPKqMVGASXZmNtqVatcEVtiVFTIwsfTGPh7awWM0sQlCWtNHyA
+
+###
+# Health Check
+GET {{api}}/healthchecker HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Create a New Brilliant Achiever
+POST {{api}}/achievers HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "John Doe",
+  "location": "New York",
+  "achievement": "Top of the Class",
+  "image": "http://example.com/image.jpg",
+  "created_by": 1,
+  "date": "2024-08-01T00:00:00Z"  
+}
+
+
+###
+
+# Get List of Brilliant Achievers
+GET {{api}}/achievers HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Find a Brilliant Achiever by ID
+GET {{api}}/achievers/{{achieverId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Update a Brilliant Achiever by ID
+PUT {{api}}/achievers/{{achieverId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "John Doe Updated",
+  "location": "Los Angeles",
+  "achievement": "Best Performer",
+  "image": "http://example.com/new-image.jpg",
+  "created_by": 1,
+  "date": "2024-08-02"
+}
+
+###
+
+# Delete a Brilliant Achiever by ID
+DELETE {{api}}/achievers/{{achieverId}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

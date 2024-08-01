@@ -30,6 +30,9 @@ var (
 
 	EventController      controllers.EventController
 	EventRouteController routes.EventRouteController
+
+	BrilliantAchieverController      controllers.BrilliantAchieverController
+	BrilliantAchieverRouteController routes.BrilliantAchieverRouteController
 )
 
 func init() {
@@ -57,6 +60,9 @@ func init() {
 
 	EventController = controllers.NewEventController(initializers.DB)
 	EventRouteController = routes.NewEventRouteController(EventController)
+
+	BrilliantAchieverController = controllers.NewBrilliantAchieverController(initializers.DB)
+	BrilliantAchieverRouteController = routes.NewBrilliantAchieverRouteController(BrilliantAchieverController)
 
 	server = gin.Default()
 }
@@ -86,6 +92,8 @@ func main() {
 	PostRouteController.PostRoute(router)
 	BusinessRouteController.BusinessRoute(router)
 	EventRouteController.EventRoute(router)
+	BrilliantAchieverRouteController.BrilliantAchieverRoutes(router)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
+
 }

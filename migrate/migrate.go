@@ -20,6 +20,7 @@ var AllModels = []interface{}{
 	&models.BusinessReview{},
 	&models.Post{},
 	&models.Event{},
+	&models.BrilliantAchiever{},
 }
 
 func init() {
