@@ -1,7 +1,7 @@
 @host = localhost:8000
 @api = http://{{host}}/api
 
-@token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI0OTcxMzUsImlhdCI6MTcyMjQ5NjIzNSwibmJmIjoxNzIyNDk2MjM1LCJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAifQ.nVGcCGPuESgtw7_moJ4cF0P_mc6Arc2Go30RMPKqMVGASXZmNtqVatcEVtiVFTIwsfTGPh7awWM0sQlCWtNHyA
+@token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQxMzY4NzksImlhdCI6MTcyNDEzNTk3OSwibmJmIjoxNzI0MTM1OTc5LCJzdWIiOjF9.xCd5Vr4q6X4Ih8ekreFj29BOVrDAEiQTz-SbDTcvmhb0FpEQtn9-HDJteFy1ApbDJD2ExogH5SBFsS6pQZVH7w
 
 ###
 # Health Check
@@ -16,7 +16,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Sample Post1 Title1",
+  "title": "Sample Post2 Title2",
   "content": "This is a sample post content.",
   "image": "https://example.com/sample-image.jpg"
 }

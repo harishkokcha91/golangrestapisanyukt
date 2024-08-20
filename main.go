@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/wpcodevo/golang-gorm-postgres/controllers"
 	"github.com/wpcodevo/golang-gorm-postgres/initializers"
@@ -85,11 +84,19 @@ func main() {
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:8000", config.ClientOrigin}
-	corsConfig.AllowCredentials = true
+	// corsConfig := cors.DefaultConfig()
+	// corsConfig.AllowOrigins = []string{"http://localhost:8000", config.ClientOrigin}
+	// corsConfig.AllowCredentials = true
 
-	server.Use(cors.New(corsConfig))
+	// server.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{"http://localhost:5000"}, // Frontend URL
+	// 	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	// 	AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+	// 	ExposeHeaders:    []string{"Content-Length"},
+	// 	AllowCredentials: true,
+	// }))
+
+	// server.Use(cors.New(corsConfig))
 
 	router := server.Group("/api")
 	router.GET("/healthchecker", func(ctx *gin.Context) {

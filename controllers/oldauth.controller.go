@@ -133,6 +133,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		UpdatedAt: now,
 	}
 
+	fmt.Println("new User ", newUser)
 	result := ac.DB.Create(&newUser)
 
 	if result.Error != nil && strings.Contains(result.Error.Error(), "duplicate key value violates unique") {

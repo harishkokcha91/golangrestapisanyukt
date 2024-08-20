@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -95,9 +96,11 @@ func (pc *PostController) FindPostById(ctx *gin.Context) {
 }
 
 func (pc *PostController) FindPosts(ctx *gin.Context) {
+	fmt.Println("I am here")
 	var page = ctx.DefaultQuery("page", "1")
 	var limit = ctx.DefaultQuery("limit", "10")
 
+	fmt.Println("I am here 1")
 	intPage, _ := strconv.Atoi(page)
 	intLimit, _ := strconv.Atoi(limit)
 	offset := (intPage - 1) * intLimit

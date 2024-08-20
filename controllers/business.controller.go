@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/wpcodevo/golang-gorm-postgres/models"
 	"gorm.io/gorm"
 )
@@ -34,7 +33,6 @@ func (bc *BusinessController) CreateBusiness(ctx *gin.Context) {
 
 	// Creating a new business instance
 	newBusiness := models.Business{
-		ID:           uuid.New(),
 		Name:         payload.Name,
 		Description:  payload.Description,
 		CategoryID:   payload.CategoryID,
